@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SECUINFO | 생산팀 연차 캘린더 시스템</title>
+    <title>SECUINFO | 생산팀 연차 관제 시스템</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -155,20 +155,55 @@
         }
         .fc-event:hover { transform: translateY(-1px) scale(1.02); }
 
-        /* 모바일 대응 CSS */
+        /* 모바일 대응 통합 수정 */
         @media (max-width: 768px) {
             body { overflow-y: auto; height: auto; }
-            .vms-header { padding: 0 1rem; flex-direction: column; height: auto; padding-top: 10px; padding-bottom: 10px; }
-            .vms-header h1 { font-size: 11px; margin-top: 5px; }
-            .brand-logo .logo-main { font-size: 20px; }
+            .vms-header { 
+                padding: 0 1rem; 
+                flex-direction: row; /* 한 줄 유지 */
+                height: 60px; 
+                min-height: 60px;
+                justify-content: space-between;
+                gap: 5px;
+            }
+            .vms-header h1 { 
+                display: block !important; /* 모바일에서도 표시 */
+                font-size: 9px; 
+                letter-spacing: 0;
+                white-space: nowrap;
+            }
+            .brand-logo .logo-main { font-size: 16px; letter-spacing: -1px; }
+            
             .vms-sidebar { width: 100%; border-right: none; border-top: 1px solid var(--vms-border); flex-shrink: 0; }
             .main-container { flex-direction: column !important; overflow-y: visible !important; }
-            .vms-main { height: 600px; flex: none; width: 100%; }
-            .fc { padding: 5px; font-size: 10px; }
-            .fc .fc-toolbar { flex-direction: column; gap: 8px; }
-            .fc .fc-toolbar-title { font-size: 1rem; }
-            .fc .fc-button-primary { padding: 4px 8px; font-size: 0.65rem; }
-            .vms-footer { position: fixed; bottom: 0; width: 100%; z-index: 100; font-size: 8px; }
+            .vms-main { min-height: 650px; flex: none; width: 100%; }
+            
+            /* 캘린더 모바일 한 줄 정렬 수정 */
+            .fc { padding: 8px; }
+            .fc .fc-toolbar { 
+                display: flex !important;
+                flex-direction: row !important; /* 한 줄 유지 */
+                justify-content: space-between !important;
+                align-items: center !important;
+                gap: 4px !important; 
+                margin-bottom: 1em !important;
+            }
+            .fc .fc-toolbar-title { 
+                font-size: 0.85rem !important; /* 2026년 4월 한 줄 유지 */
+                white-space: nowrap;
+                margin: 0 !important;
+            }
+            .fc .fc-button-group { 
+                display: flex !important;
+                gap: 2px !important;
+            }
+            .fc .fc-button { 
+                padding: 4px 6px !important; 
+                font-size: 0.6rem !important; 
+                height: 30px !important;
+            }
+            
+            .vms-footer { position: fixed; bottom: 0; width: 100%; z-index: 100; font-size: 7px; height: 24px; }
             .vms-modal { width: 95%; margin: 10px; }
         }
 
@@ -205,25 +240,27 @@
 <body>
 
     <header class="vms-header">
-        <div class="flex items-center gap-4 md:gap-8">
+        <div class="flex items-center gap-2 md:gap-8">
             <div class="brand-logo">
                 <div class="logo-main">
                     <span class="logo-en">SECUINFO</span>
-                    <span class="logo-ko">시큐인포</span>
+                    <span class="logo-ko hidden xs:inline">시큐인포</span>
                     <span class="logo-dot">_</span>
                 </div>
             </div>
             <div class="h-6 w-[1px] bg-slate-700/50 hidden lg:block"></div>
-            <h1 class="font-bold text-slate-400 text-[10px] md:text-sm tracking-[0.1em] hidden sm:block">
-                <i class="fas fa-calendar-alt mr-2 text-cyan-500"></i>
+            <!-- 모바일에서도 표시되도록 hidden sm:block 제거 및 사이즈 조정 -->
+            <h1 class="font-bold text-slate-400 text-[8px] xs:text-[10px] md:text-sm tracking-[0.05em]">
+                <i class="fas fa-calendar-alt mr-1 text-cyan-500"></i>
                 생산팀 연차 공유 시스템
             </h1>
         </div>
         
-        <div class="flex items-center gap-4">
-            <div id="auth-status" class="hidden xs:flex items-center gap-2 mono text-[9px] text-emerald-400 bg-emerald-500/5 px-3 py-1.5 border border-emerald-500/20 rounded-full font-bold uppercase tracking-wider">
+        <div class="flex items-center gap-2">
+            <div id="auth-status" class="flex items-center gap-1 mono text-[8px] md:text-[9px] text-emerald-400 bg-emerald-500/5 px-2 md:px-3 py-1 md:py-1.5 border border-emerald-500/20 rounded-full font-bold uppercase tracking-wider">
                 <span class="status-glow text-emerald-500 bg-emerald-500 animate-pulse"></span>
-                Live_Connected
+                <span class="hidden xs:inline">Live_Connected</span>
+                <span class="xs:hidden">LIVE</span>
             </div>
         </div>
     </header>
@@ -341,7 +378,6 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase 설정 (사용자 설정에 맞춰 유지)
         const firebaseConfig = {
             apiKey: "AIzaSyBWm2UcNKQnI6dHx1TAs3m-I1kxiulZI48",
             authDomain: "secu-info-technical-support.firebaseapp.com",
@@ -402,7 +438,7 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
-                if (authStatus) authStatus.innerHTML = '<span class="status-glow text-emerald-500 bg-emerald-500 animate-pulse"></span> Live_Connected';
+                if (authStatus) authStatus.innerHTML = '<span class="status-glow text-emerald-500 bg-emerald-500 animate-pulse"></span> <span class="hidden xs:inline">Live_Connected</span><span class="xs:hidden">LIVE</span>';
                 if (!calendar) setupCalendar();
             }
         });
@@ -415,7 +451,7 @@
                 headerToolbar: { 
                     left: 'prev,next today', 
                     center: 'title', 
-                    right: window.innerWidth < 768 ? 'dayGridMonth,timeGridWeek' : 'dayGridMonth,timeGridWeek' 
+                    right: 'dayGridMonth,timeGridWeek' 
                 },
                 slotMinTime: '08:00:00', slotMaxTime: '17:00:00', height: '100%',
                 handleWindowResize: true,
