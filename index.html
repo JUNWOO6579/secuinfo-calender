@@ -152,75 +152,7 @@
         }
         .fc-event:hover { transform: translateY(-1px) scale(1.02); }
 
-        /* 모바일 대응 통합 수정 */
-        @media (max-width: 768px) {
-            body { overflow-y: auto; height: auto; }
-            .vms-header { 
-                padding: 0 0.75rem; 
-                flex-direction: row; 
-                height: 60px; 
-                min-height: 60px;
-                justify-content: space-between;
-                gap: 5px;
-            }
-            .vms-header h1 { 
-                display: block !important; 
-                font-size: 10px; 
-                letter-spacing: 0;
-                white-space: nowrap;
-                max-width: 140px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            .brand-logo .logo-main { font-size: 16px; letter-spacing: -1px; }
-            
-            .vms-sidebar { width: 100%; border-right: none; border-top: 1px solid var(--vms-border); flex-shrink: 0; padding: 10px 0; }
-            .vms-sidebar .p-6 { padding: 1rem !important; }
-            .main-container { flex-direction: column !important; overflow-y: visible !important; }
-            .vms-main { min-height: 550px; flex: none; width: 100%; }
-            
-            /* 캘린더 모바일 헤더 한 줄 강제 정렬 */
-            .fc { padding: 5px; }
-            .fc .fc-toolbar { 
-                display: flex !important;
-                flex-direction: row !important; 
-                flex-wrap: nowrap !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                gap: 2px !important; 
-                margin-bottom: 0.8em !important;
-            }
-            .fc .fc-toolbar-chunk {
-                display: flex !important;
-                align-items: center !important;
-            }
-            .fc .fc-toolbar-title { 
-                font-size: 0.75rem !important; 
-                white-space: nowrap;
-                margin: 0 4px !important;
-                flex-shrink: 0;
-            }
-            .fc .fc-button-group { 
-                display: flex !important;
-                gap: 1px !important;
-            }
-            .fc .fc-button { 
-                padding: 2px 4px !important; 
-                font-size: 0.55rem !important; 
-                height: 26px !important;
-                min-width: unset !important;
-            }
-            .fc .fc-today-button {
-                padding: 2px 4px !important;
-                font-size: 0.55rem !important;
-                height: 26px !important;
-                margin-left: 2px !important;
-            }
-            
-            .vms-footer { position: fixed; bottom: 0; width: 100%; z-index: 100; font-size: 7px; height: 22px; padding: 0 10px; }
-            .vms-modal { width: 92%; margin: 10px; }
-        }
-
+        /* 모달 스타일 */
         .modal-overlay {
             display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.85);
             backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 1rem;
@@ -248,6 +180,80 @@
             display: inline-block;
             margin-right: 6px;
             box-shadow: 0 0 8px currentColor;
+        }
+
+        /* 모바일 대응 통합 수정 및 헤더 한 줄 정렬 강제 */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; height: auto; min-height: 100vh; }
+            .vms-header { 
+                padding: 0 0.75rem; 
+                flex-direction: row !important; 
+                height: 60px; 
+                min-height: 60px;
+                justify-content: space-between;
+                gap: 5px;
+            }
+            .vms-header h1 { 
+                display: block !important; 
+                font-size: 9px !important; 
+                letter-spacing: 0;
+                white-space: nowrap;
+                max-width: 130px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .brand-logo .logo-main { font-size: 15px; letter-spacing: -1px; }
+            
+            /* 사이드바 숨김 처리 */
+            .vms-sidebar { display: none; }
+            .main-container { flex-direction: column !important; overflow-y: visible !important; }
+            .vms-main { min-height: 600px; flex: none; width: 100%; display: block !important; }
+            
+            /* 캘린더 모바일 헤더 한 줄 강제 정렬 */
+            .fc { padding: 5px; overflow: visible !important; }
+            .fc .fc-toolbar { 
+                display: flex !important;
+                flex-direction: row !important; 
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                gap: 2px !important; 
+                margin-bottom: 0.5em !important;
+                padding: 0 2px !important;
+            }
+            /* 각 그룹을 인라인 블록처럼 처리 */
+            .fc .fc-toolbar-chunk {
+                display: flex !important;
+                align-items: center !important;
+                flex-shrink: 1;
+            }
+            .fc .fc-toolbar-title { 
+                font-size: 0.7rem !important; 
+                white-space: nowrap;
+                margin: 0 2px !important;
+                flex-shrink: 0;
+                color: var(--vms-accent-cyan) !important;
+            }
+            .fc .fc-button-group { 
+                display: flex !important;
+                gap: 1px !important;
+            }
+            .fc .fc-button { 
+                padding: 2px 4px !important; 
+                font-size: 0.5rem !important; 
+                height: 24px !important;
+                line-height: 1 !important;
+                min-width: unset !important;
+            }
+            .fc .fc-today-button {
+                padding: 2px 4px !important;
+                font-size: 0.5rem !important;
+                height: 24px !important;
+                margin-left: 1px !important;
+            }
+            
+            .vms-footer { position: fixed; bottom: 0; width: 100%; z-index: 100; font-size: 7px; height: 22px; padding: 0 10px; }
+            .vms-modal { width: 92%; margin: 10px; }
         }
     </style>
 </head>
@@ -279,25 +285,26 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden main-container">
-        <aside class="vms-sidebar">
+        <!-- 사이드바: 모바일에서는 숨김 처리 -->
+        <aside class="vms-sidebar hidden md:flex">
             <div class="p-6 border-b border-white/5">
-                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 md:mb-5 italic border-l-2 border-indigo-500 pl-3">Member Colors</p>
-                <div class="space-y-4 text-[11px] text-slate-400 leading-relaxed bg-indigo-500/5 p-3 md:p-4 rounded-xl border border-indigo-500/10">
-                    <p>인원별 <span class="text-indigo-400 font-bold underline">고유 색상</span> 자동 지정 시스템 가동 중</p>
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-5 italic border-l-2 border-indigo-500 pl-3">Member Colors</p>
+                <div class="space-y-4 text-[11px] text-slate-400 leading-relaxed bg-indigo-500/5 p-4 rounded-xl border border-indigo-500/10">
+                    <p>등록된 인원별로 시스템이 <span class="text-indigo-400 font-bold underline">고유 색상</span>을 자동으로 지정합니다.</p>
                 </div>
             </div>
 
             <div class="p-6 flex-1 overflow-y-auto">
                 <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">사용 안내</p>
-                <div class="grid grid-cols-1 gap-2 md:gap-4 text-[11px] text-slate-400 leading-relaxed">
+                <div class="space-y-4 text-[11px] text-slate-400 leading-relaxed">
                     <div class="flex gap-3 items-center group cursor-help">
-                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-all">
                             <i class="fas fa-plus text-emerald-500"></i>
                         </div>
                         <span>날짜 클릭: 일정 등록</span>
                     </div>
                     <div class="flex gap-3 items-center group cursor-help">
-                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
+                        <div class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center border border-rose-500/20 group-hover:bg-rose-500/20 transition-all">
                             <i class="fas fa-trash-alt text-rose-500"></i>
                         </div>
                         <span>기록 클릭: 일정 취소</span>
@@ -305,21 +312,23 @@
                 </div>
             </div>
             
-            <div class="p-4 text-center border-t border-white/5 pb-10 md:pb-5">
+            <div class="p-5 text-center border-t border-white/5">
                 <span class="text-[9px] text-slate-600 mono uppercase tracking-[0.3em] font-bold">Copyright © 2026 옥준우</span>
             </div>
         </aside>
 
+        <!-- 메인 관제 영역 -->
         <main class="vms-main">
             <div id="calendar"></div>
         </main>
     </div>
 
+    <!-- 푸터 상태바 -->
     <footer class="vms-footer flex justify-between select-none mono uppercase tracking-widest">
         <div class="flex items-center gap-6">
-            <span class="flex items-center gap-2 text-[8px] md:text-[9px]"><span class="text-emerald-500">●</span> SYSTEM_READY</span>
+            <span class="flex items-center gap-2 text-[9px]"><span class="text-emerald-500">●</span> SYSTEM_READY</span>
         </div>
-        <div class="flex items-center gap-6 text-[8px] md:text-[9px]">
+        <div class="flex items-center gap-6 text-[9px]">
             <span id="current-time-display" class="text-slate-400 hidden sm:inline"></span>
             <span class="text-cyan-500 font-bold border-l border-white/10 pl-4">Copyright © 2026 옥준우</span>
         </div>
@@ -327,12 +336,12 @@
 
     <!-- 등록 모달 -->
     <div id="modal-overlay" class="modal-overlay">
-        <div class="vms-modal shadow-2xl animate-in zoom-in-95 duration-200">
+        <div class="vms-modal rounded-xl shadow-2xl animate-in zoom-in-95 duration-200">
             <div class="bg-[#1e293b] p-4 flex justify-between items-center border-b border-white/5">
                 <span class="text-[11px] font-bold text-cyan-400 mono flex items-center gap-2">
                     <i class="fas fa-plus-circle"></i> 연차 계획 등록
                 </span>
-                <button onclick="closeModal()" class="text-slate-500 hover:text-white transition w-8 h-8 flex items-center justify-center rounded-full"><i class="fas fa-times"></i></button>
+                <button onclick="closeModal()" class="text-slate-500 hover:text-white transition w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-8 space-y-6">
                 <div>
@@ -490,17 +499,30 @@
                 const events = snapshot.docs.map(doc => {
                     const d = doc.data();
                     const memberColor = getMemberColor(d.name);
-                    let isAllDay = true, start = d.date, end = null;
+                    
+                    let isAllDay = true;
+                    let startTime = null;
+                    let endTime = null;
 
-                    if (d.type === '오전반차') { isAllDay = false; start = d.date + 'T08:00:00'; end = d.date + 'T12:00:00'; }
-                    else if (d.type === '오후반차') { isAllDay = false; start = d.date + 'T13:00:00'; end = d.date + 'T17:00:00'; }
-                    else if (d.type === '시간차') { isAllDay = false; start = d.date + 'T' + d.startTime + ':00'; end = d.date + 'T' + d.endTime + ':00'; }
+                    if (d.type === '오전반차') {
+                        isAllDay = false;
+                        startTime = d.date + 'T08:00:00';
+                        endTime = d.date + 'T12:00:00';
+                    } else if (d.type === '오후반차') {
+                        isAllDay = false;
+                        startTime = d.date + 'T13:00:00';
+                        endTime = d.date + 'T17:00:00';
+                    } else if (d.type === '시간차') {
+                        isAllDay = false;
+                        startTime = d.date + 'T' + d.startTime + ':00';
+                        endTime = d.date + 'T' + d.endTime + ':00';
+                    }
 
                     return {
                         id: doc.id,
                         title: `${d.name} (${d.type})`,
-                        start: isAllDay ? d.date : start,
-                        end: end,
+                        start: isAllDay ? d.date : startTime,
+                        end: isAllDay ? null : endTime,
                         allDay: isAllDay,
                         backgroundColor: memberColor,
                         textColor: '#ffffff',
@@ -514,9 +536,13 @@
 
         const handleSave = async () => {
             const name = userNameInput.value.trim();
-            const type = typeSelect.value, start = startTimeInput.value, end = endTimeInput.value;
+            const type = typeSelect.value;
+            const start = startTimeInput.value;
+            const end = endTimeInput.value;
+
             if (!name) return alert("성함을 입력해 주세요.");
             if (type === '시간차' && (!start || !end || start >= end)) return alert("시간 범위를 확인해 주세요.");
+
             if (!currentUser) return;
 
             try {
@@ -545,7 +571,9 @@
         setInterval(() => {
             const now = new Date();
             const display = document.getElementById('current-time-display');
-            if (display) display.innerText = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+            if (display) {
+                display.innerText = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+            }
         }, 1000);
 
         document.getElementById('confirm-btn').onclick = handleSave;
