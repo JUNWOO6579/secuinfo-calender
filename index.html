@@ -84,8 +84,8 @@
             flex: 1;
             background: transparent;
             position: relative;
-            overflow-y: auto;
             min-width: 0;
+            height: 100%;
         }
 
         .brand-logo .logo-main {
@@ -104,9 +104,9 @@
             50% { opacity: 0.4; transform: scale(0.8); }
         }
 
-        /* 캘린더 기본 스타일 */
         .fc { border: none !important; color: #f1f5f9; height: 100%; padding: 15px; }
         .fc-theme-standard td, .fc-theme-standard th { border: 1px solid rgba(51, 65, 85, 0.4) !important; }
+        .fc .fc-toolbar-title { font-size: 1.3rem; font-weight: 800; color: #fff; }
         
         .fc .fc-button-primary { 
             background: rgba(30, 41, 59, 0.6); border: 1px solid var(--vms-border); color: #94a3b8; 
@@ -116,58 +116,73 @@
 
         /* 모바일 대응 통합 수정 */
         @media (max-width: 768px) {
-            body { overflow-y: auto; height: auto; min-height: 100vh; }
+            body { overflow: hidden; height: 100vh; }
             .vms-header { 
-                padding: 0 0.75rem; 
+                padding: 0 0.5rem; 
                 flex-direction: row !important; 
-                height: 60px; 
+                height: 55px; 
                 justify-content: space-between;
+                flex-wrap: nowrap;
             }
             .vms-header h1 { 
                 display: block !important; 
                 font-size: 9px !important; 
-                max-width: 120px;
+                max-width: 110px;
                 white-space: nowrap;
                 overflow: hidden;
+                margin-left: 5px;
             }
-            .brand-logo .logo-main { font-size: 14px; }
+            .brand-logo .logo-main { font-size: 13px; }
             
-            .vms-sidebar { display: none; }
-            .main-container { flex-direction: column !important; }
+            .vms-sidebar { display: none !important; }
+            .main-container { flex-direction: column !important; height: calc(100vh - 55px - 28px); }
             
-            /* 캘린더 사라짐 방지: 최소 높이 강제 지정 */
             .vms-main { 
-                min-height: 650px !important; 
-                height: 650px !important; 
-                flex: none; 
+                height: 100% !important; 
                 width: 100%; 
+                overflow: hidden;
             }
             
-            /* 캘린더 상단바 한 줄 정렬 */
-            .fc { padding: 5px !important; }
+            /* 캘린더 헤더 모바일 한 줄 강제 정렬 로직 */
+            .fc { padding: 4px !important; }
             .fc .fc-toolbar { 
                 display: flex !important;
                 flex-direction: row !important; 
                 flex-wrap: nowrap !important;
                 justify-content: space-between !important;
                 align-items: center !important;
-                margin-bottom: 0.5em !important;
+                margin-bottom: 0.4em !important;
+                padding: 0 1px !important;
+            }
+            .fc .fc-toolbar-chunk {
+                display: flex !important;
+                align-items: center !important;
+                gap: 1px !important;
             }
             .fc .fc-toolbar-title { 
                 font-size: 0.75rem !important; 
-                margin: 0 2px !important;
+                margin: 0 3px !important;
                 flex-shrink: 0;
+                color: var(--vms-accent-cyan) !important;
+                font-weight: 800;
             }
             .fc .fc-button-group { display: flex !important; gap: 1px !important; }
             .fc .fc-button { 
-                padding: 2px 5px !important; 
-                font-size: 0.55rem !important; 
-                height: 28px !important;
+                padding: 2px 4px !important; 
+                font-size: 0.5rem !important; 
+                height: 24px !important;
+                min-width: 28px !important;
+                line-height: 1 !important;
             }
-            .fc .fc-today-button { height: 28px !important; font-size: 0.55rem !important; }
+            /* Today 버튼을 View 버튼 그룹 바로 옆으로 밀착 */
+            .fc .fc-today-button { 
+                height: 24px !important; 
+                font-size: 0.5rem !important; 
+                margin: 0 1px !important;
+                padding: 2px 4px !important;
+            }
         }
 
-        /* 공통 모달 및 기타 스타일 유지... */
         .modal-overlay {
             display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.85);
             backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 1rem;
@@ -178,6 +193,13 @@
         }
         .vms-input { background: #1e293b; border: 1px solid rgba(51, 65, 85, 0.6); color: #fff; width: 100%; padding: 14px; border-radius: 8px; outline: none; }
         .vms-footer { height: 28px; background: rgba(15, 23, 42, 0.8); border-top: 1px solid var(--vms-border); font-size: 9px; display: flex; align-items: center; padding: 0 15px; color: #94a3b8; flex-shrink: 0; }
+        
+        .status-glow {
+            width: 8px; height: 8px; border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            box-shadow: 0 0 8px currentColor;
+        }
     </style>
 </head>
 <body>
@@ -208,7 +230,7 @@
             <div class="p-6 border-b border-white/5">
                 <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-5 italic border-l-2 border-indigo-500 pl-3">Member Colors</p>
                 <div class="space-y-4 text-[11px] text-slate-400 leading-relaxed bg-indigo-500/5 p-4 rounded-xl border border-indigo-500/10">
-                    <p>인원별 고유 색상 자동 지정 시스템</p>
+                    <p>인원별 고유 색상 자동 지정 시스템 가동 중</p>
                 </div>
             </div>
             <div class="p-6 flex-1 overflow-y-auto">
@@ -347,12 +369,13 @@
                 initialView: 'dayGridMonth',
                 locale: 'ko',
                 headerToolbar: { 
-                    left: 'prev,next today', 
-                    center: 'title', 
-                    right: 'dayGridMonth,timeGridWeek' 
+                    left: 'prev,next',  // 이전/다음 버튼을 왼쪽으로
+                    center: 'title',     // 날짜 타이틀을 중앙으로
+                    right: 'today dayGridMonth,timeGridWeek' // 오늘 버튼을 뷰 전환 버튼 그룹 옆으로 배치
                 },
                 slotMinTime: '08:00:00', slotMaxTime: '17:00:00',
-                height: 'auto',
+                height: 'parent',
+                handleWindowResize: true,
                 dateClick: (info) => {
                     selectedDate = info.dateStr;
                     modal.style.display = 'flex';
@@ -376,20 +399,12 @@
                     const d = doc.data();
                     const memberColor = getMemberColor(d.name);
                     let isAllDay = true, start = d.date, end = null;
-
                     if (d.type === '오전반차') { isAllDay = false; start = d.date + 'T08:00:00'; end = d.date + 'T12:00:00'; }
                     else if (d.type === '오후반차') { isAllDay = false; start = d.date + 'T13:00:00'; end = d.date + 'T17:00:00'; }
                     else if (d.type === '시간차') { isAllDay = false; start = d.date + 'T' + d.startTime + ':00'; end = d.date + 'T' + d.endTime + ':00'; }
-
                     return {
-                        id: doc.id,
-                        title: `${d.name} (${d.type})`,
-                        start: isAllDay ? d.date : start,
-                        end: end,
-                        allDay: isAllDay,
-                        backgroundColor: memberColor,
-                        textColor: '#ffffff',
-                        borderColor: 'transparent'
+                        id: doc.id, title: `${d.name} (${d.type})`, start: isAllDay ? d.date : start, end: end, allDay: isAllDay,
+                        backgroundColor: memberColor, textColor: '#ffffff', borderColor: 'transparent'
                     };
                 });
                 calendar.removeAllEvents();
@@ -402,17 +417,9 @@
             const type = typeSelect.value, start = startTimeInput.value, end = endTimeInput.value;
             if (!name) return alert("성함을 입력해 주세요.");
             if (type === '시간차' && (!start || !end || start >= end)) return alert("시간 범위를 확인해 주세요.");
-
             try {
                 const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'vacations');
-                await addDoc(colRef, {
-                    name, type, 
-                    startTime: type === '시간차' ? start : null,
-                    endTime: type === '시간차' ? end : null,
-                    date: selectedDate,
-                    userId: currentUser.uid,
-                    createdAt: new Date().toISOString()
-                });
+                await addDoc(colRef, { name, type, startTime: type === '시간차' ? start : null, endTime: type === '시간차' ? end : null, date: selectedDate, userId: currentUser.uid, createdAt: new Date().toISOString() });
                 closeModal();
             } catch (err) { console.error(err); }
         };
